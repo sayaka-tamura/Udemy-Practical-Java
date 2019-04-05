@@ -11,6 +11,8 @@ public class Car {
 	private boolean available;
 	private Date firstReleaseDate;
 	private List<String> additionalFeatures;
+	private Engine engine;
+	private List<Tire> compatibleTire;
 
 	public Car() {
 
@@ -33,6 +35,14 @@ public class Car {
 
 	public String getColor() {
 		return color;
+	}
+
+	public List<Tire> getCompatibleTire() {
+		return compatibleTire;
+	}
+
+	public Engine getEngine() {
+		return engine;
 	}
 
 	public Date getFirstReleaseDate() {
@@ -65,6 +75,14 @@ public class Car {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public void setCompatibleTire(List<Tire> compatibleTire) {
+		this.compatibleTire = compatibleTire;
+	}
+
+	public void setEngine(Engine engine) {
+		this.engine = engine;
 	}
 
 	public void setFirstReleaseDate(Date firstReleaseDate) {

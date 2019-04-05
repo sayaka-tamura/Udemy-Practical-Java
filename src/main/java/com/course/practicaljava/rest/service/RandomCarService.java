@@ -6,6 +6,8 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.course.practicaljava.rest.domain.Car;
+import com.course.practicaljava.rest.domain.Engine;
+import com.course.practicaljava.rest.domain.Tire;
 import com.course.practicaljava.util.RandomDateUtil;
 
 @Service
@@ -25,6 +27,7 @@ public class RandomCarService implements CarService {
 		car.setPrice(5000 + random.nextInt(7001));
 		car.setFirstReleaseDate(RandomDateUtil.generateRandomDate());
 
+		// Additional Features Part
 		var randomCount = random.nextInt(ADDITONAL_FEATURES.size());
 		var additionalFeatures = new ArrayList<String>();
 
@@ -33,6 +36,25 @@ public class RandomCarService implements CarService {
 		}
 
 		car.setAdditionalFeatures(additionalFeatures);
+
+		// Engine Part
+		var randomFuelType = FUEL_TYPES.get(random.nextInt(FUEL_TYPES.size()));
+		var randomHorsepower = 100 + random.nextInt(121);
+		var randomEngine = new Engine(randomFuelType, randomHorsepower);
+		car.setEngine(randomEngine);
+
+		// Tire Part
+		var randomCompatibleTires = new ArrayList<Tire>();
+		for (int i = 0; i < 3; i++) {
+			var tireManufacturer = TIRE_MANUFACTURERS.get(random.nextInt(TIRE_MANUFACTURERS.size()));
+			var tireSize = 15 + random.nextInt(3);
+			var tirePrice = 200 + random.nextInt(200);
+
+			var randomTire = new Tire(tireManufacturer, tireSize, tirePrice);
+			randomCompatibleTires.add(randomTire);
+		}
+
+		car.setCompatibleTire(randomCompatibleTires);
 
 		return car;
 	}
