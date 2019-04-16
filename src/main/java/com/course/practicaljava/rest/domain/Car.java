@@ -3,6 +3,12 @@ package com.course.practicaljava.rest.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,6 +17,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Document(indexName = "practical-java", type = "car")
 public class Car {
 	private String brand;
 	private String color;
@@ -18,7 +25,11 @@ public class Car {
 	private int price;
 	private boolean available;
 
-	@JsonFormat(pattern = "dd-MMM-yyyy hh:mm:ssaZ", timezone = "Asia/Tokyo")
+	@Id
+	private String id;
+
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "Asia/Tokyo")
+	@Field(type = FieldType.Date, format = DateFormat.date_time)
 	private Date firstReleaseDate;
 
 	@JsonInclude(value = Include.NON_EMPTY)
@@ -67,6 +78,10 @@ public class Car {
 		return firstReleaseDate;
 	}
 
+	public String getId() {
+		return id;
+	}
+
 	public int getPrice() {
 		return price;
 	}
@@ -109,6 +124,10 @@ public class Car {
 
 	public void setFirstReleaseDate(Date firstReleaseDate) {
 		this.firstReleaseDate = firstReleaseDate;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public void setPrice(int price) {
