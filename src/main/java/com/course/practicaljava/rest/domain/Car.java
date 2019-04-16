@@ -13,10 +13,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+// @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Document(indexName = "practical-java", type = "car")
 public class Car {
 	private String brand;
@@ -28,7 +26,7 @@ public class Car {
 	@Id
 	private String id;
 
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "Asia/Tokyo")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "Asia/Jakarta")
 	@Field(type = FieldType.Date, format = DateFormat.date_time)
 	private Date firstReleaseDate;
 
@@ -38,7 +36,7 @@ public class Car {
 	@JsonUnwrapped
 	private Engine engine;
 
-	private List<Tire> compatibleTire;
+	private List<Tire> compatibleTires;
 
 	@JsonInclude(value = Include.NON_EMPTY)
 	private String secretFeature;
@@ -67,7 +65,7 @@ public class Car {
 	}
 
 	public List<Tire> getCompatibleTire() {
-		return compatibleTire;
+		return compatibleTires;
 	}
 
 	public Engine getEngine() {
@@ -114,8 +112,8 @@ public class Car {
 		this.color = color;
 	}
 
-	public void setCompatibleTire(List<Tire> compatibleTire) {
-		this.compatibleTire = compatibleTire;
+	public void setCompatibleTire(List<Tire> compatibleTires) {
+		this.compatibleTires = compatibleTires;
 	}
 
 	public void setEngine(Engine engine) {
@@ -146,7 +144,7 @@ public class Car {
 	public String toString() {
 		return "Car [brand=" + brand + ", color=" + color + ", type=" + type + ", price=" + price + ", available="
 				+ available + ", firstReleaseDate=" + firstReleaseDate + ", additionalFeatures=" + additionalFeatures
-				+ ", engine=" + engine + ", compatibleTire=" + compatibleTire + ", secretFeature=" + secretFeature
+				+ ", engine=" + engine + ", compatibleTire=" + compatibleTires + ", secretFeature=" + secretFeature
 				+ "]";
 	}
 
