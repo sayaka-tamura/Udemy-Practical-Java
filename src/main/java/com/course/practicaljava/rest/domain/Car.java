@@ -13,8 +13,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-// @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Document(indexName = "practical-java", type = "car")
 public class Car {
 	private String brand;
@@ -64,7 +66,7 @@ public class Car {
 		return color;
 	}
 
-	public List<Tire> getCompatibleTire() {
+	public List<Tire> getCompatibleTires() {
 		return compatibleTires;
 	}
 
@@ -112,7 +114,7 @@ public class Car {
 		this.color = color;
 	}
 
-	public void setCompatibleTire(List<Tire> compatibleTires) {
+	public void setCompatibleTires(List<Tire> compatibleTires) {
 		this.compatibleTires = compatibleTires;
 	}
 
@@ -144,7 +146,7 @@ public class Car {
 	public String toString() {
 		return "Car [brand=" + brand + ", color=" + color + ", type=" + type + ", price=" + price + ", available="
 				+ available + ", firstReleaseDate=" + firstReleaseDate + ", additionalFeatures=" + additionalFeatures
-				+ ", engine=" + engine + ", compatibleTire=" + compatibleTires + ", secretFeature=" + secretFeature
+				+ ", engine=" + engine + ", compatibleTires=" + compatibleTires + ", secretFeature=" + secretFeature
 				+ "]";
 	}
 

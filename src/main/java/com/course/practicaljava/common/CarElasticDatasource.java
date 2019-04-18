@@ -31,13 +31,10 @@ public class CarElasticDatasource {
 	@EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
 	public void populateData() {
 		log.info("Start DELETE");
-		try {
-			var response = restTemplate.exchange("http://localhost:9200/practical-java", HttpMethod.DELETE, null,
-					String.class);
-			log.info("DELETE result : " + response.getBody());
-		} catch (Exception e) {
-			log.info("error", e);
-		}
+
+		var response = restTemplate.exchange("http://localhost:9200/practical-java", HttpMethod.DELETE, null,
+				String.class);
+		log.info("DELETE result : " + response.getBody());
 
 		var cars = new ArrayList<Car>();
 		for (int i = 0; i < 10000; i++) {
