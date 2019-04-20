@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.course.practicaljava.repository.CarElasticRepository;
 import com.course.practicaljava.rest.domain.Car;
+import com.course.practicaljava.rest.domain.ErrorResponse;
 import com.course.practicaljava.rest.service.CarService;
 
 @RestController
@@ -86,10 +91,28 @@ public class CarRestController {
 	}
 
 	@GetMapping(path = "/cars/{brand}/{color}")
-	public List<Car> findCarsByPath(@PathVariable String brand, @PathVariable String color,
+	public ResponseEntity<Object> findCarsByPath(@PathVariable String brand, @PathVariable String color,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+		// Add HTTP Header to into ResponseEntity
+		var headers = new HttpHeaders();
+		headers.add(HttpHeaders.SERVER, "Spring");
+		headers.add("Custom", "Coustom Response Header");
+
+		// Check if the parameter 'color' is numeric
+		// if the color is numeric
+		if (StringUtils.isNumeric(color)) {
+			// create Error message
+			var errorResponse = new ErrorResponse("Invalid Color", System.currentTimeMillis());
+			return new ResponseEntity<>(errorResponse, headers, HttpStatus.BAD_REQUEST);
+		}
+
 		var pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, "price"));
-		return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
+		var cars = carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
+
+		// return List<Car> and HTTP headers with HTTP status 200
+		return ResponseEntity.ok().headers(headers).body(cars);
+
 	}
 
 	@GetMapping(path = "/cars")
