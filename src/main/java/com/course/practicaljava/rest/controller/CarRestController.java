@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -118,6 +119,12 @@ public class CarRestController {
 	@GetMapping(path = "/cars")
 	public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+		// Add IllegalArgumentException for the invalid 'color' parameter
+		if (StringUtils.isNumeric(color)) {
+			throw new IllegalArgumentException("Invalid Color : " + color);
+		}
+
 		var pageable = PageRequest.of(page, size);
 		return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
 	}
@@ -126,6 +133,16 @@ public class CarRestController {
 	public List<Car> findCarsReleasedAfter(
 			@RequestParam(name = "first_release_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date firstReleaseDate) {
 		return carElasticRepository.findByFirstReleaseDateAfter(firstReleaseDate.getTime());
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class) // Annotation to handle an exception
+	public ResponseEntity<ErrorResponse> handleInvalidColorException(IllegalArgumentException e) {
+		var errorMessage = "Exception : " + e.getMessage();
+		// error message for console
+		log.warn(errorMessage);
+
+		var errorResponse = new ErrorResponse(errorMessage, System.currentTimeMillis());
+		return new ResponseEntity<>(errorResponse, null, HttpStatus.BAD_REQUEST);
 	}
 
 }
