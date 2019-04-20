@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.course.practicaljava.exception.IllegalApiParamException;
 import com.course.practicaljava.repository.CarElasticRepository;
 import com.course.practicaljava.rest.domain.Car;
 import com.course.practicaljava.rest.domain.ErrorResponse;
@@ -124,6 +125,10 @@ public class CarRestController {
 		if (StringUtils.isNumeric(color)) {
 			throw new IllegalArgumentException("Invalid Color : " + color);
 		}
+		// Add IllegalApiParamException for the invalid brand
+		if (StringUtils.isNumeric(brand)) {
+			throw new IllegalApiParamException("Invalid brand : " + brand);
+		}
 
 		var pageable = PageRequest.of(page, size);
 		return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
@@ -138,6 +143,16 @@ public class CarRestController {
 	@ExceptionHandler(IllegalArgumentException.class) // Annotation to handle an exception
 	public ResponseEntity<ErrorResponse> handleInvalidColorException(IllegalArgumentException e) {
 		var errorMessage = "Exception : " + e.getMessage();
+		// error message for console
+		log.warn(errorMessage);
+
+		var errorResponse = new ErrorResponse(errorMessage, System.currentTimeMillis());
+		return new ResponseEntity<>(errorResponse, null, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(IllegalApiParamException.class)
+	public ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
+		var errorMessage = "Exception IllegalApiParamException : " + e.getMessage();
 		// error message for console
 		log.warn(errorMessage);
 
