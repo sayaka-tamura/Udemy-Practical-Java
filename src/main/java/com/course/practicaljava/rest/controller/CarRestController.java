@@ -8,6 +8,9 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,13 +86,17 @@ public class CarRestController {
 	}
 
 	@GetMapping(path = "/cars/{brand}/{color}")
-	public List<Car> findCarsByPath(@PathVariable String brand, @PathVariable String color) {
-		return carElasticRepository.findByBrandAndColor(brand, color);
+	public List<Car> findCarsByPath(@PathVariable String brand, @PathVariable String color,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		var pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, "price"));
+		return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
 	}
 
 	@GetMapping(path = "/cars")
-	public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color) {
-		return carElasticRepository.findByBrandAndColor(brand, color);
+	public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		var pageable = PageRequest.of(page, size);
+		return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
 	}
 
 	@GetMapping(path = "/cars/date")
