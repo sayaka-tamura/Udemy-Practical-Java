@@ -27,10 +27,8 @@ repositories {
 ext{
 	commonsLang3Version = '3.8.1'
 	elasticSearchVersion = '6.5.0'
-	/**
-	junitVersion = '5.3.1'
-	junitPlatformVersion = '1.3.1'
-	*/
+	junitVersion = '5.3.2'
+	junitPlatformVersion = '1.4.2'
 }
 
 dependencies {
@@ -45,18 +43,20 @@ dependencies {
 	
 	// providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	
-	/**
+	// Add JUnit 5 dependency
 	testCompile "org.junit.jupiter:junit-jupiter-engine:${junitVersion}",
 		"org.junit.jupiter:junit-jupiter-api:${junitVersion}",
-		"org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
-	*/
-
-	// Add JUnit 5 dependency
-	testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')	// junit-jupiter-api has many annotations
-	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.2')	// junit-jupiter-engine: test engine
+		"org.junit.platform:junit-platform-suite-api:${junitPlatformVersion}"
+	// Enable use of the JUnitPlatform Runner within the IDE
+	// ***** testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
+	
+	/**
+	testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")	// junit-jupiter-api has many annotations
+	testCompile("org.junit.platform:junit-platform-suite-api:1.3.1")
+	testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")	// junit-jupiter-engine: test engine
 	
 	test {
 	    useJUnitPlatform()
 	}
-
+	*/
 }
