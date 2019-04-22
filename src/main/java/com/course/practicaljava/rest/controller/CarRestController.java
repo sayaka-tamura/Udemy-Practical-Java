@@ -17,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +48,6 @@ public class CarRestController {
 
 //	@RequestMapping(path = "/random", method = RequestMethod.GET) //Same meaning as below
 	@GetMapping(path = "/random", produces = MediaType.APPLICATION_JSON_VALUE)
-
 	public Car random() {
 		return carService.generateCar();
 	}
@@ -99,7 +97,7 @@ public class CarRestController {
 		// Add HTTP Header to into ResponseEntity
 		var headers = new HttpHeaders();
 		headers.add(HttpHeaders.SERVER, "Spring");
-		headers.add("Custom", "Coustom Response Header");
+		headers.add("Custom", "Custom Response Header");
 
 		// Check if the parameter 'color' is numeric
 		// if the color is numeric
@@ -140,24 +138,15 @@ public class CarRestController {
 		return carElasticRepository.findByFirstReleaseDateAfter(firstReleaseDate.getTime());
 	}
 
-	@ExceptionHandler(IllegalArgumentException.class) // Annotation to handle an exception
-	public ResponseEntity<ErrorResponse> handleInvalidColorException(IllegalArgumentException e) {
-		var errorMessage = "Exception : " + e.getMessage();
-		// error message for console
-		log.warn(errorMessage);
-
-		var errorResponse = new ErrorResponse(errorMessage, System.currentTimeMillis());
-		return new ResponseEntity<>(errorResponse, null, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(IllegalApiParamException.class)
-	public ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
-		var errorMessage = "Exception IllegalApiParamException : " + e.getMessage();
-		// error message for console
-		log.warn(errorMessage);
-
-		var errorResponse = new ErrorResponse(errorMessage, System.currentTimeMillis());
-		return new ResponseEntity<>(errorResponse, null, HttpStatus.BAD_REQUEST);
-	}
-
+	/*
+	 * @ExceptionHandler(IllegalArgumentException.class) // Annotation to handle an
+	 * exception public ResponseEntity<ErrorResponse>
+	 * handleInvalidColorException(IllegalArgumentException e) { var errorMessage =
+	 * "Exception : " + e.getMessage(); // error message for console
+	 * log.warn(errorMessage);
+	 * 
+	 * var errorResponse = new ErrorResponse(errorMessage,
+	 * System.currentTimeMillis()); return new ResponseEntity<>(errorResponse, null,
+	 * HttpStatus.BAD_REQUEST); }
+	 */
 }
