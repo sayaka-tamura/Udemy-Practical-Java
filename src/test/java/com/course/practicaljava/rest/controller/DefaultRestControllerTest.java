@@ -26,8 +26,9 @@ class DefaultRestControllerTest {
 
 	@Test // Annotation for a testing method
 	void testWelcome() throws Exception {
+		// Build a HTTP GET mock Request
 		var endpoint = "/api/welcome";
-		var requestBuilder = MockMvcRequestBuilders.get(endpoint); // Build a HTTP GET mock Request
+		var requestBuilder = MockMvcRequestBuilders.get(endpoint);
 
 		// Simulate the request and compare the result using MockMvc(using andExpect)
 		mockMvc.perform(requestBuilder).andExpect(status().isOk())
