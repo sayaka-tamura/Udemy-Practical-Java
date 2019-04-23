@@ -2,6 +2,7 @@ package com.course.practicaljava.rest.controller;
 
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +61,25 @@ public class DefaultRestController {
 	@GetMapping("/header-three")
 	public Map<String, String> headerByAll(@RequestHeader HttpHeaders headers) {
 		return headers.toSingleValueMap();
+	}
+
+	// Generate HTTP error status
+	@GetMapping("/random-error")
+	public ResponseEntity<String> randomError() {
+		// Create random integer
+		int remainder = new Random().nextInt() % 6;
+		var body = "Kibana";
+		// Return HTTP status based on "remainder"
+		switch (remainder) {
+		case 0:
+			return ResponseEntity.ok().body(body); // Return HTTP 200
+		case 1:
+		case 2:
+			return ResponseEntity.badRequest().body(body); // Return HTTP 400
+		default:
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body); // Return HTTP 500, and String //
+																						// "Kibana"
+		}
 	}
 
 }
