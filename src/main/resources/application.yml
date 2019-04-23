@@ -4,3 +4,5 @@ server:
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
+    
+management:  metrics:    export:      elastic:        step: 30s
