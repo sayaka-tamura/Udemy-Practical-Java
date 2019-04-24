@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@Api(tags = { "Default API" }, description = "API from class DefaultRestController") // Annotation for using Springfox
 @RestController
 @RequestMapping("/api")
 public class DefaultRestController {
@@ -34,10 +39,13 @@ public class DefaultRestController {
 		return LocalTime.now().toString();
 	}
 
+	@ApiOperation(value = "Get header and display it") // Annotation for using Springfox for method
 	// Use @RequestHeader with String to get HTTP headers
 	@GetMapping("/header-one")
-	public String headerByAnnotation(@RequestHeader(name = "User-agent") String headerUserAgent,
-			@RequestHeader(name = "Practical-java", required = false) String headerPracticalJava) {
+	public String headerByAnnotation(
+			// @ApiParam: Annotation for using Springfox on method parameter
+			@ApiParam(value = "Header User-agent") @RequestHeader(name = "User-agent") String headerUserAgent,
+			@ApiParam(value = "Header Practical-java") @RequestHeader(name = "Practical-java", required = false) String headerPracticalJava) {
 		var sb = new StringBuilder();
 		sb.append("User-agent : " + headerUserAgent);
 		sb.append(" || ");

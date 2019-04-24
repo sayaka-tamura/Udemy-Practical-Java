@@ -33,6 +33,11 @@ import com.course.practicaljava.rest.domain.Car;
 import com.course.practicaljava.rest.domain.ErrorResponse;
 import com.course.practicaljava.rest.service.CarService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("/api/car/v1")
 public class CarRestController {
@@ -53,9 +58,11 @@ public class CarRestController {
 		return carService.generateCar();
 	}
 
+	@ApiOperation(value = "Echo car from request body") // Annotation for using Swagger
 	@PostMapping(path = "/echo", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String echo(@RequestBody Car car) {
+	public String echo(@ApiParam(value = "Car for echo") @RequestBody Car car) {
 		log.info("The car is : " + car);
+
 		return car.toString();
 	}
 
@@ -80,8 +87,9 @@ public class CarRestController {
 		return carElasticRepository.save(car);
 	}
 
+	@ApiOperation(value = "Find car by ID") // Annotation for using Swagger
 	@GetMapping(path = "/cars/{id}")
-	public Car findCarsById(@PathVariable String id) {
+	public Car findCarsById(@ApiParam(value = "ID of car") @PathVariable String id) {
 		return carElasticRepository.findById(id).orElse(null);
 	}
 
@@ -92,6 +100,10 @@ public class CarRestController {
 	}
 
 	@GetMapping(path = "/cars/{brand}/{color}")
+	// To document HTTP Response on Swagger
+	@ApiResponses({
+			@ApiResponse(code = 400, message = "Invalid parameter (numeric color)", response = ErrorResponse.class),
+			@ApiResponse(code = 200, message = "Return cars with specific brand and color", response = Car.class, responseContainer = "List") })
 	public ResponseEntity<Object> findCarsByPath(@PathVariable String brand, @PathVariable String color,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 

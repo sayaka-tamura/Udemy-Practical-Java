@@ -30,6 +30,7 @@ ext{
 	junitVersion = '5.3.1'
 	junitPlatformVersion = '1.3.1'
 	micrometerRegistryVersion = '1.1.0'
+	springfoxVersion = '2.9.2'	// to generate swagger specification from Java file
 }
 
 dependencies {
@@ -40,7 +41,9 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	
 	compile "org.apache.commons:commons-lang3:${commonsLang3Version}",
-		"org.elasticsearch.client:transport:${elasticSearchVersion}"
+		"org.elasticsearch.client:transport:${elasticSearchVersion}",
+		"io.springfox:springfox-swagger2:${springfoxVersion}",	// to generate swagger specification from Java file
+		"io.springfox:springfox-swagger-ui:${springfoxVersion}"	// for user-interface of swagger documentation
 			
 	compile("org.springframework.boot:spring-boot-devtools")
 	
